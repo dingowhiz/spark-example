@@ -45,22 +45,29 @@ sbt compile
 ### Quick Start
 ```bash
 sbt run
+# Or run specific application
+sbt "runMain com.packt.descala.scalaplayground.FirstSparkApp"
 ```
 
-### Expected Output
-The application will demonstrate:
-- Spark session creation with version info
-- Sample DataFrame with employee data
-- Age statistics (count, mean, std deviation)
-- Filtered results (people over 27)
-- Job count aggregation
+### Applications Available
+1. **SparkExample.scala** - Original demonstration with filtering and groupBy operations
+2. **FirstSparkApp.scala** - Enhanced example with statistical analysis
 
+### Execution Results - FirstSparkApp (August 1, 2025)
+
+**✅ Successful Execution Summary:**
+- **Total Runtime**: 19 seconds
+- **Spark Version**: 3.5.1
+- **Java Version**: 22.0.1
+- **Records Processed**: 5 employee records
+- **Operations**: DataFrame creation, count, show, statistical analysis
+
+**Sample Output:**
 ```
-🚀 Spark Session Created Successfully!
-Spark Version: 3.5.1
-Scala Version: version 2.13.12
+DataFrame created successfully!
+Number of records: 5
 
-📊 Sample DataFrame:
+Sample data:
 +-------+---+--------------+
 |   Name|Age|           Job|
 +-------+---+--------------+
@@ -68,19 +75,24 @@ Scala Version: version 2.13.12
 |    Bob| 30|Data Scientist|
 |Charlie| 35|       Manager|
 |  Diana| 28|     Developer|
+|    Eve| 32|       Analyst|
 +-------+---+--------------+
 
-📈 DataFrame Statistics:
-+-------+-----------------+
-|summary|              Age|
-+-------+-----------------+
-|  count|                4|
-|   mean|             29.5|
-| stddev|4.203173404306164|
-|    min|               25|
-|    max|               35|
-+-------+-----------------+
+Age statistics:
++-----------+---------+
+|Average_Age|Total_Age|
++-----------+---------+
+|       30.0|      150|
++-----------+---------+
+
+✅ Spark session stopped. FirstSparkApp completed!
 ```
+
+**Performance Metrics:**
+- Memory allocated: 1802.4 MiB
+- Spark jobs executed: 4
+- Data processing time: ~6 seconds
+- Resource cleanup: Successful
 
 ## 📁 Project Structure
 
@@ -93,9 +105,15 @@ spark-example/
 ├── src/
 │   └── main/
 │       └── scala/
-│           └── SparkExample.scala  # Main Spark application
+│           ├── SparkExample.scala      # Original Spark DataFrame demo
+│           └── FirstSparkApp.scala     # Enhanced statistical analysis demo
 ├── target/                   # Compiled artifacts (gitignored)
-└── README.md                # This documentation
+├── README.md                # This documentation
+├── CHANGELOG.md             # Version history and updates
+├── MYSQL_SETUP.md           # MySQL installation and setup guide
+├── MYSQL_LAUNCH_GUIDE.md    # MySQL usage instructions
+├── MINIO_SETUP_GUIDE.md     # MinIO object storage setup
+└── MinIO-Aliases.ps1        # PowerShell aliases for MinIO
 ```
 
 ## 🔧 Configuration Details

@@ -7,6 +7,9 @@ version := "1.0"
 // Use Scala 2.13.x for Spark compatibility (Spark doesn't fully support Scala 3.x yet)
 scalaVersion := "2.13.12"
 
+// Set main class for running
+Compile / mainClass := Some("com.packt.descala.scalaplayground.FirstSparkApp")
+
 // Apache Spark version - latest stable release
 val sparkVersion = "3.5.1"
 
