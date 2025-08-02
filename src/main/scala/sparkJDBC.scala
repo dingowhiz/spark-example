@@ -24,4 +24,6 @@ object ReadTable extends App {
     
     // Stop Spark session
     session.stop()
+    
+    // SparkJDBC example complete
 }
