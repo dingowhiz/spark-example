@@ -39,7 +39,8 @@ run / javaOptions ++= Seq(
 libraryDependencies ++= Seq(
   "org.apache.spark" %% "spark-core" % sparkVersion,      // Core Spark functionality
   "org.apache.spark" %% "spark-sql" % sparkVersion,       // SQL and DataFrame API
-  "org.apache.spark" %% "spark-mllib" % sparkVersion % "provided" // Machine learning (optional)
+  "org.apache.spark" %% "spark-mllib" % sparkVersion % "provided", // Machine learning (optional)
+  "mysql" % "mysql-connector-java" % "8.0.33"            // MySQL JDBC driver
 )
 
 // Exclude conflicting Hadoop dependencies to avoid version conflicts

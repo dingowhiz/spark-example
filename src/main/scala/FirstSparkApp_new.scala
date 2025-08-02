@@ -1,4 +1,4 @@
-package com.packt.descala.scalaplayground
+ package com.packt.descala.scalaplayground
 
 import org.apache.spark.sql.{
     DataFrame,

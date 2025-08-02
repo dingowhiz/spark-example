@@ -4,7 +4,36 @@ A complete example demonstrating Apache Spark DataFrame operations using Scala 3
 
 ## 🚀 Features
 
-- **SparkSession Configuration**: Local cluster setup with adaptive query execution
+- **SparkSession Configuration**: Local cluster s# Filtering and aggregation
+df.filter($"Age" > 27).show()
+df.groupBy("Job").count().show()
+```
+
+### JDBC Database Connectivity
+```scala
+// Connect to MySQL database
+val airportsDF = spark.read
+  .format("jdbc")
+  .option("url", "jdbc:mysql://localhost:3306/mysql")
+  .option("dbtable", "airports")
+  .option("user", "root")
+  .option("password", "dundee")
+  .load()
+
+// Display data from database
+airportsDF.show()
+```
+
+### Spark Configuration for Windows
+```scala
+val spark = SparkSession.builder()
+  .appName("Spark JDBC Example")
+  .master("local[*]")
+  .config("spark.driver.host", "localhost")
+  .config("spark.driver.bindAddress", "127.0.0.1")
+  .config("spark.sql.adaptive.enabled", "false")
+  .getOrCreate()
+``` with adaptive query execution
 - **DataFrame Operations**: Creating, filtering, and transforming data
 - **Statistical Analysis**: Descriptive statistics and aggregations
 - **Data Processing**: Group by operations and filtering
@@ -47,11 +76,14 @@ sbt compile
 sbt run
 # Or run specific application
 sbt "runMain com.packt.descala.scalaplayground.FirstSparkApp"
+# Or run JDBC example
+sbt "runMain com.packt.descala.scalaplayground.ReadTable"
 ```
 
 ### Applications Available
 1. **SparkExample.scala** - Original demonstration with filtering and groupBy operations
 2. **FirstSparkApp.scala** - Enhanced example with statistical analysis
+3. **sparkJDBC.scala** - MySQL database connectivity via JDBC with Spark DataFrames
 
 ### Execution Results - FirstSparkApp (August 1, 2025)
 
@@ -94,6 +126,34 @@ Age statistics:
 - Data processing time: ~6 seconds
 - Resource cleanup: Successful
 
+### Execution Results - ReadTable JDBC (August 2, 2025)
+
+**✅ Successful MySQL JDBC Integration:**
+- **Total Runtime**: 19 seconds
+- **Spark Version**: 3.5.1 with JDBC connectivity
+- **MySQL Version**: 8.4 with custom airline data
+- **Records Retrieved**: 20+ airport records from MySQL database
+- **Operations**: JDBC connection, DataFrame loading, data display
+
+**Sample Output:**
+```
++---------+--------------------+-------------+-----+-------+--------+-----------+
+|iata_code|             airport|         city|state|country|latitude|  longitude|
++---------+--------------------+-------------+-----+-------+--------+-----------+
+|      ABE|Lehigh Valley Int...|    Allentown|   PA|    USA|40.65236|   -75.4404|
+|      ABI|Abilene Regional ...|      Abilene|   TX|    USA|32.41132|   -99.6819|
+|      ABQ|Albuquerque Inter...|  Albuquerque|   NM|    USA|35.04022|-106.60919|
+|      ABR|Aberdeen Regional...|     Aberdeen|   SD|    USA|45.44906|  -98.42183|
++---------+--------------------+-------------+-----+-------+--------+-----------+
+only showing top 20 rows
+```
+
+**Technical Achievements:**
+- MySQL JDBC driver integration (`mysql-connector-java:8.0.33`)
+- Windows hostname resolution fixes for Spark networking
+- Database credential management with secure connection
+- Real-world airport data processing from MySQL tables
+
 ## 📁 Project Structure
 
 ```
@@ -106,10 +166,13 @@ spark-example/
 │   └── main/
 │       └── scala/
 │           ├── SparkExample.scala      # Original Spark DataFrame demo
-│           └── FirstSparkApp.scala     # Enhanced statistical analysis demo
+│           ├── FirstSparkApp.scala     # Enhanced statistical analysis demo
+│           └── sparkJDBC.scala         # MySQL JDBC connectivity example
 ├── target/                   # Compiled artifacts (gitignored)
 ├── README.md                # This documentation
 ├── CHANGELOG.md             # Version history and updates
+├── SESSION_SUMMARY.md       # Complete development session history
+├── SPARK_JDBC_SESSION.md    # Detailed JDBC integration documentation
 ├── MYSQL_SETUP.md           # MySQL installation and setup guide
 ├── MYSQL_LAUNCH_GUIDE.md    # MySQL usage instructions
 ├── MINIO_SETUP_GUIDE.md     # MinIO object storage setup
@@ -128,7 +191,8 @@ spark-example/
 ```scala
 libraryDependencies ++= Seq(
   "org.apache.spark" %% "spark-core" % "3.5.1",
-  "org.apache.spark" %% "spark-sql" % "3.5.1"
+  "org.apache.spark" %% "spark-sql" % "3.5.1",
+  "mysql" % "mysql-connector-java" % "8.0.33"  // MySQL JDBC driver
 )
 ```
 
@@ -189,6 +253,15 @@ df.groupBy("Job").count().show()
 3. **Memory Issues**
    - Increase JVM heap: Add `-Xmx4g` to `javaOptions`
    - Adjust Spark executor memory in configuration
+
+4. **MySQL Connection Issues**
+   - Verify MySQL service is running: `Get-Service MySQL*`
+   - Check credentials and database exists
+   - Ensure MySQL JDBC driver is in classpath
+
+5. **Spark Networking on Windows**
+   - Use `spark.driver.host` and `spark.driver.bindAddress` configurations
+   - Set hostname resolution to localhost for local development
 
 ### Version Compatibility
 - **Scala 3.x**: Use Scala 2.13.x for Spark compatibility
